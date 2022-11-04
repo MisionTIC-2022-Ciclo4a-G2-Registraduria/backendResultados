@@ -1,20 +1,20 @@
 from flask import Blueprint
 from flask import request
 
-from controllers.politicalPartyController import PoliticalPartyController
+from controllers.political_party_controller import PoliticalPartyController
 
 
 political_party_blueprints = Blueprint('political_party_blueprints', __name__)
-political_party_controller = PoliticalPartyController
+political_party_controller = PoliticalPartyController()
 
 
 @political_party_blueprints.route("/political_party/all", methods=['GET'])
-def get_political_parties():
+def get_political_party():
     response = political_party_controller.index()
     return response, 200
 
 
-@political_party_blueprints.route("/political_party/<string:id>", methods=['GET'])
+@political_party_blueprints.route("/political_party/<string:id_>", methods=['GET'])
 def get_political_party_by_id(id_):
     response = political_party_controller.show(id_)
     return response, 200
@@ -27,15 +27,14 @@ def insert_political_party():
     return response, 201
 
 
-@political_party_blueprints.route("/political_party/update/<string:id>", methods=['PATCH'])
+@political_party_blueprints.route("/political_party/update/<string:id_>", methods=['PATCH'])
 def update_political_party(id_):
     political = request.get_json()
     response = political_party_controller.update(id_, political)
     return response, 201
 
 
-@political_party_blueprints.route("/political_party/delete/<string:id>", methods=['DELETE'])
+@political_party_blueprints.route("/political_party/delete/<string:id_>", methods=['DELETE'])
 def delete_political_party(id_):
     response = political_party_controller.delete(id_)
-    return response,  204
-
+    return response, 204

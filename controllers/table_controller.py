@@ -1,39 +1,34 @@
 from models.table import Table
+from repositories.table_repository import TableRepository
 
 
+# TODO check validations and errors codes
 class TableController:
+
     def __init__(self):
         """
         This is the constructor of the TableController class
         """
-        print("Table controller ready")
+        print("Table Controller ready")
+        self.table_repository = TableRepository()
 
     def index(self) -> list:
         """
-        This method returns all tables persisted in the DB
+        This method returns all tables persisted in the db
         :return: table's list
         """
         print("return all tables")
-        data = {
-            "_id": "abc123",
-            "_cedula": "123456"
-        }
-        table = Table(data)
-        return [table.__dict__]
+        return self.table_repository.find_all()
 
     def show(self, id_: str) -> dict:
         """
-        This method returns
+
         :param id_:
         :return:
         """
         print("return one table")
-        data = {
-            "_id": id_,
-            "_cedula": "123456"
-        }
-        table = Table(data)
-        return table.__dict__
+        table = self.table_repository.find_by_id(id_)
+        return table
 
     def create(self, table_: dict) -> dict:
         """
@@ -43,9 +38,10 @@ class TableController:
         """
         print("insert a table")
         table = Table(table_)
-        return table.__dict__
+        table_ = self.table_repository.save(table)
+        return table_
 
-    def update(self, id_, table_: dict) -> dict:
+    def update(self, id_: str, table_: dict) -> dict:
         """
 
         :param id_:
@@ -53,10 +49,9 @@ class TableController:
         :return:
         """
         print("update a table")
-        data = table_
-        data['_id'] = id_
-        table = Table(data)
-        return table.__dict__
+        table = Table(table_)
+        table_ = self.table_repository.update(id_, table)
+        return table_
 
     def delete(self, id_: str) -> dict:
         """
@@ -64,5 +59,5 @@ class TableController:
         :param id_:
         :return:
         """
-        print("delete table" + id_)
-        return {"Delete count": 1}
+        print("delete table " + id_)
+        return self.table_repository.delete(id_)

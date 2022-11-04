@@ -1,7 +1,7 @@
 from flask import Blueprint
 from flask import request
 
-from controllers.tableController import TableController
+from controllers.table_controller import TableController
 
 
 table_blueprints = Blueprint('table_blueprints', __name__)
@@ -10,7 +10,7 @@ table_controller = TableController()
 
 @table_blueprints.route("/table/all", methods=['GET'])
 def get_tables():
-    response = table_controller.index()
+    response = table_controller.index();
     return response, 200
 
 
