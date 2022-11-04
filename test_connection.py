@@ -11,6 +11,7 @@ print(db)
 
 data_base = client["results_db"]
 print(data_base.list_collection_names())
+
 collection = data_base.get_collection("vote")
 print(collection.find())
 
