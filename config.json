@@ -1,0 +1,6 @@
+{
+ "url-backend": "127.0.0.1",
+  "port" : 8081,
+ "db-connection" : "mongodb+srv://andres10cortes07:20012022...franklin@misiontic.8wmnvvk.mongodb.net/results_db?retryWrites=true&w=majority",
+ "db-name" : "results_db"
+}
