@@ -10,7 +10,7 @@ table_controller = TableController()
 
 @table_blueprints.route("/table/all", methods=['GET'])
 def get_tables():
-    response = table_controller.index();
+    response = table_controller.index()
     return response, 200
 
 

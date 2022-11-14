@@ -9,13 +9,13 @@ candidate_controller = CandidateController()
 
 
 @candidate_blueprints.route("/candidate/all", methods=['GET'])
-def get_candidates():
+def get_candidate():
     response = candidate_controller.index()
     return response, 200
 
 
-@candidate_blueprints.route("/candidate/<string:id>", methods=['GET'])
-def get_candidate_by_id(id_):
+@candidate_blueprints.route("/candidate/<string:id_>", methods=['GET'])
+def get_course_by_id(id_):
     response = candidate_controller.show(id_)
     return response, 200
 
@@ -31,6 +31,12 @@ def insert_candidate():
 def update_candidate(id_):
     candidate = request.get_json()
     response = candidate_controller.update(id_, candidate)
+    return response, 201
+
+
+@candidate_blueprints.route("/candidate/<string:id_>/politicalParty/<string:politicalParty_id>", methods=['PUT'])
+def update_political_party_ref(id_, politicalParty_id):
+    response = candidate_controller.assign_political_party(id_, politicalParty_id)
     return response, 201
 
 
