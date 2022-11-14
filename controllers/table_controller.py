@@ -2,14 +2,12 @@ from models.table import Table
 from repositories.table_repository import TableRepository
 
 
-# TODO check validations and errors codes
 class TableController:
-
     def __init__(self):
         """
         This is the constructor of the TableController class
         """
-        print("Table Controller ready")
+        print("Table controller ready")
         self.table_repository = TableRepository()
 
     def index(self) -> list:
