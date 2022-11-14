@@ -44,14 +44,14 @@ class InterfaceRepository(Generic[T]):
             dataset.append(document)
         return dataset
 
-    def find_by_id(self, id_: str) -> T:
+    def find_by_id(self, id_: str) -> dict:
         """
 
         :param id_:
         :return:
         """
         current_collection = self.data_base[self.collection]
-        document = current_collection.find_one({"_id": ObjectId(id_)})
+        document = current_collection.find_one({'_id': ObjectId(id_)})
         document = self.get_values_db_ref(document)
         if document:
             document['_id'] = document['_id'].__str__()
@@ -59,7 +59,7 @@ class InterfaceRepository(Generic[T]):
             document = {}
         return document
 
-    def save(self, item: T) -> T:
+    def save(self, item: T) -> dict:
         """
 
         :param item:
@@ -73,17 +73,14 @@ class InterfaceRepository(Generic[T]):
             delattr(item, '_id')
             item = item.__dict__
             update_item = {"$set": item}
-            document = current_collection.update_one({'_id': _id}, update_item)
+            current_collection.update_one({'_id': _id}, update_item)
         else:
             _id = current_collection.insert_one(item.__dict__)
             id_ = _id.inserted_id.__str__()
-        # self.find_by_id(id_)
-        document = current_collection.find_one({"_id": ObjectId(id_)})
-        document['_id'] = document['_id'].__str__()
-        return document
+        return self.find_by_id(id_)
 
     # TODO evaluate if this function is necessary
-    def update(self, id_: str, item: T) -> T:
+    def update(self, id_: str, item: T) -> dict:
         """
 
         :param id_:
@@ -109,7 +106,7 @@ class InterfaceRepository(Generic[T]):
         result = current_collection.delete_one({'_id': _id})
         return {"deleted_count": result.deleted_count}
 
-    # TODO despues de verificar, esto se puede eliminar y cambiar nombre de find_all
+    # TODO después de verificar, esto se puede eliminar y cambiar nombre de find_all
     def query(self, query: dict) -> list:
         current_collection = self.data_base[self.collection]
         dataset = []
@@ -121,7 +118,7 @@ class InterfaceRepository(Generic[T]):
         return dataset
 
     # TODO usar condicional para dejar una sola función de búsqueda de varios documentos
-    def query_aggregation(self, query: dict) -> list:
+    def query_aggregation(self, query: list) -> list:
         """
 
         :param query:
@@ -181,7 +178,7 @@ class InterfaceRepository(Generic[T]):
             if isinstance(document.get(key), ObjectId):
                 document[key] = document[key].__str__()
             elif isinstance(document.get(key), list):
-                document[key] = self.format_list(data.get(key))
+                document[key] = self.format_list(document.get(key))
             elif isinstance(document[key], dict):
                 document[key] = self.transform_object_ids(document.get(key))
         return document
@@ -212,7 +209,7 @@ class InterfaceRepository(Generic[T]):
             if item_dict.get(key).__str__().count("object") == 1:
                 object_ = self.object_to_db_ref(getattr(item, key))
                 setattr(item, key, object_)
-            return item
+        return item
 
     def object_to_db_ref(self, item: T) -> DBRef:
         """
