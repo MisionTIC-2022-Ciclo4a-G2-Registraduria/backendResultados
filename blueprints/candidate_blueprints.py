@@ -9,13 +9,13 @@ candidate_controller = CandidateController()
 
 
 @candidate_blueprints.route("/candidate/all", methods=['GET'])
-def get_candidate():
+def get_candidates():
     response = candidate_controller.index()
     return response, 200
 
 
 @candidate_blueprints.route("/candidate/<string:id_>", methods=['GET'])
-def get_course_by_id(id_):
+def get_candidate_by_id(id_):
     response = candidate_controller.show(id_)
     return response, 200
 
@@ -34,13 +34,14 @@ def update_candidate(id_):
     return response, 201
 
 
-@candidate_blueprints.route("/candidate/<string:id_>/politicalParty/<string:politicalParty_id>", methods=['PUT'])
-def update_political_party_ref(id_, politicalParty_id):
-    response = candidate_controller.assign_political_party(id_, politicalParty_id)
+# TODO define best handle for this one
+@candidate_blueprints.route("/candidate/<string:id_>/political_party/<string:political_party_id>", methods=['PUT'])
+def update_political_party_ref(id_, political_party_id):
+    response = candidate_controller.assign_political_party(id_, political_party_id)
     return response, 201
 
 
 @candidate_blueprints.route("/candidate/delete/<string:id_>", methods=['DELETE'])
-def delete_candidate(id_):
+def delete_course(id_):
     response = candidate_controller.delete(id_)
     return response, 204

@@ -1,4 +1,4 @@
-from models.abstractModel import AbstractModel
+from models.abstract_model import AbstractModel
 
 
 class PoliticalParty(AbstractModel):

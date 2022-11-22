@@ -6,4 +6,4 @@ class ReportsController:
         self.report_repository = ReportsRepository()
 
     def report_highest_stats(self):
-        return self.report_repository.get_grades_stats()
+        return self.report_repository.get_cantidad_stats()

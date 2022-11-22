@@ -1,36 +1,34 @@
 from models.candidate import Candidate
-from models.politicalparty import PoliticalParty
+from models.political_party import PoliticalParty
 from repositories.candidate_repository import CandidateRepository
-from repositories.politicalparty_repository import PoliticalRepository
+from repositories.political_party_repository import PoliticalPartyRepository
 
 
 # TODO check validations and errors codes
 class CandidateController:
-
     def __init__(self):
         """
 
         """
         print("Candidate controller ready")
         self.candidate_repository = CandidateRepository()
-        self.political_party_repository = PoliticalRepository()
+        self.political_party_repository = PoliticalPartyRepository()
 
-    def assign_political_party(self, candidate_id: str, politicalParty_id: str) -> dict:
+    def assign_political_party(self, candidate_id: str, political_party_id: str) -> dict:
         """
 
         :param candidate_id:
-        :param politicalParty_id:
+        :param political_party_id:
         :return:
         """
         candidate_dict = self.candidate_repository.find_by_id(candidate_id)
         candidate = Candidate(candidate_dict)
-        political_party_dict = self.political_party_repository.find_by_id(politicalParty_id)
+        political_party_dict = self.political_party_repository.find_by_id(political_party_id)
         political_party = PoliticalParty(political_party_dict)
-        # TODO setattr(candidate, "political_party", political_party)
         candidate.political_party = political_party
         return self.candidate_repository.save(candidate)
 
-    def index(self) -> list:
+    def index(self):
         """
 
         :return:
@@ -44,7 +42,7 @@ class CandidateController:
         :param id_:
         :return:
         """
-        print("return one table")
+        print("return one candidate")
         candidate = self.candidate_repository.find_by_id(id_)
         return candidate
 
@@ -54,9 +52,10 @@ class CandidateController:
         :param candidate_:
         :return:
         """
-        print("insert candidate")
+        print("insert a candidate")
         candidate = Candidate(candidate_)
-        return self.candidate_repository.save(candidate)
+        candidate_ = self.candidate_repository.save(candidate)
+        return candidate_
 
     def update(self, id_, candidate_: dict) -> dict:
         """
@@ -65,7 +64,7 @@ class CandidateController:
         :param candidate_:
         :return:
         """
-        print("update candidate")
+        print("update a candidate")
         candidate = Candidate(candidate_)
         candidate_ = self.candidate_repository.update(id_, candidate)
         return candidate_

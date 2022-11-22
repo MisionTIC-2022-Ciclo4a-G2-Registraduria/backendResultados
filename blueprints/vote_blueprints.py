@@ -3,12 +3,13 @@ from flask import request
 
 from controllers.vote_controller import VoteController
 
+
 vote_blueprints = Blueprint('vote_blueprints', __name__)
 vote_controllers = VoteController()
 
 
 @vote_blueprints.route("/vote/all", methods=['GET'])
-def get_tables():
+def get_votes():
     response = vote_controllers.index()
     return response, 200
 
@@ -20,13 +21,12 @@ def get_vote_by_id(id_):
 
 
 @vote_blueprints.route("/vote/by-candidate/<string:candidate_id>")
-def get_enrollment_by_candidate(candidate_id):
-    response = vote_controllers.list_table_by_candidate(candidate_id)
+def get_votes_by_candidate(candidate_id):
+    response = vote_controllers.list_tables_by_candidate(candidate_id)
     return response, 200
 
 
-@vote_blueprints.route(
-    "/vote/insert/table/<string:table_id>/candidate/<string:candidate_id>", methods=['POST'])
+@vote_blueprints.route("/vote/insert/table/<string:table_id>/candidate/<string:candidate_id>", methods=['POST'])
 def insert_vote(table_id, candidate_id):
     vote = request.get_json()
     response = vote_controllers.create(vote, table_id, candidate_id)

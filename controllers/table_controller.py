@@ -2,6 +2,7 @@ from models.table import Table
 from repositories.table_repository import TableRepository
 
 
+# TODO check validations and errors codes
 class TableController:
     def __init__(self):
         """
@@ -12,7 +13,7 @@ class TableController:
 
     def index(self) -> list:
         """
-        This method returns all tables persisted in the db
+        This method returns all tables persisted in the DB
         :return: table's list
         """
         print("return all tables")
@@ -20,7 +21,7 @@ class TableController:
 
     def show(self, id_: str) -> dict:
         """
-
+        This method returns
         :param id_:
         :return:
         """
@@ -39,7 +40,7 @@ class TableController:
         table_ = self.table_repository.save(table)
         return table_
 
-    def update(self, id_: str, table_: dict) -> dict:
+    def update(self, id_, table_: dict) -> dict:
         """
 
         :param id_:
@@ -57,5 +58,5 @@ class TableController:
         :param id_:
         :return:
         """
-        print("delete table " + id_)
+        print("delete table" + id_)
         return self.table_repository.delete(id_)

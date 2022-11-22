@@ -27,24 +27,24 @@ class InterfaceRepository(Generic[T]):
         """
         with open("config.json") as file:
             data = json.load(file)
+
         return data
 
-    def find_all(self, query: dict = {}) -> list:
+    def find_all(self) -> list:
         """
 
-        :param query:
         :return:
         """
         current_collection = self.data_base[self.collection]
         dataset = []
-        for document in current_collection.find(query):
+        for document in current_collection.find():
             document['_id'] = document['_id'].__str__()
-            document = self.transform_object_ids(document)
+            document = self.transform_object_lds(document)
             document = self.get_values_db_ref(document)
             dataset.append(document)
         return dataset
 
-    def find_by_id(self, id_: str) -> dict:
+    def find_by_id(self, id_: str) -> T:
         """
 
         :param id_:
@@ -57,9 +57,10 @@ class InterfaceRepository(Generic[T]):
             document['_id'] = document['_id'].__str__()
         else:
             document = {}
+
         return document
 
-    def save(self, item: T) -> dict:
+    def save(self, item: T) -> T:
         """
 
         :param item:
@@ -79,10 +80,9 @@ class InterfaceRepository(Generic[T]):
             id_ = _id.inserted_id.__str__()
         return self.find_by_id(id_)
 
-    # TODO evaluate if this function is necessary
-    def update(self, id_: str, item: T) -> dict:
+# TODO evaluate if this function is necessary
+    def update(self, id_: str, item: T) -> T:
         """
-
         :param id_:
         :param item:
         :return:
@@ -93,7 +93,7 @@ class InterfaceRepository(Generic[T]):
         update_item = {"$set": item}
         document = current_collection.update_one({'_id': _id}, update_item)
         # TODO check if it is better to return an object
-        return {"update_count": document.matched_count}
+        return {"updated_count": document.matched_count}
 
     def delete(self, id_: str) -> dict:
         """
@@ -106,19 +106,24 @@ class InterfaceRepository(Generic[T]):
         result = current_collection.delete_one({'_id': _id})
         return {"deleted_count": result.deleted_count}
 
-    # TODO después de verificar, esto se puede eliminar y cambiar nombre de find_all
+    # TODO despues de verificar ,esto se puede eliminar, y cambiar nombre de find_all
     def query(self, query: dict) -> list:
+        """
+
+        :param query:
+        :return:
+        """
         current_collection = self.data_base[self.collection]
         dataset = []
         for document in current_collection.find(query):
             document['_id'] = document['_id'].__str__()
-            document = self.transform_object_ids(document)
+            document = self.transform_object_lds(document)
             document = self.get_values_db_ref(document)
             dataset.append(document)
         return dataset
 
-    # TODO usar condicional para dejar una sola función de búsqueda de varios documentos
-    def query_aggregation(self, query: list) -> list:
+    # TODO usar condicional para dejar una sola funcion de busqueda de varios documentos
+    def query_aggregation(self, query: dict) -> list:
         """
 
         :param query:
@@ -128,7 +133,7 @@ class InterfaceRepository(Generic[T]):
         dataset = []
         for document in current_collection.aggregate(query):
             document['_id'] = document['_id'].__str__()
-            document = self.transform_object_ids(document)
+            document = self.transform_object_lds(document)
             document = self.get_values_db_ref(document)
             dataset.append(document)
         return dataset
@@ -163,12 +168,12 @@ class InterfaceRepository(Generic[T]):
         collection_ = self.data_base[list_[0]._id.collection]
         for item in list_:
             _id = ObjectId(item._id)
-            sub_document = collection_.find_one({'_id': _id})
+            sub_document = collection_.find_one({'_id'})
             sub_document['_id'] = sub_document['_id'].__str__()
             processed_list.append(sub_document)
         return processed_list
 
-    def transform_object_ids(self, document: dict) -> dict:
+    def transform_object_lds(self, document: dict) -> dict:
         """
 
         :param document:
@@ -179,8 +184,8 @@ class InterfaceRepository(Generic[T]):
                 document[key] = document[key].__str__()
             elif isinstance(document.get(key), list):
                 document[key] = self.format_list(document.get(key))
-            elif isinstance(document[key], dict):
-                document[key] = self.transform_object_ids(document.get(key))
+            elif isinstance(document.get(key), dict):
+                document[key] = self.transform_object_lds(document.get(key))
         return document
 
     def format_list(self, list_: list) -> list:
@@ -219,3 +224,8 @@ class InterfaceRepository(Generic[T]):
         """
         collection_ = item.__class__.__name__.lower()
         return DBRef(collection_, ObjectId(item._id))
+
+
+
+
+

@@ -6,23 +6,25 @@ from repositories.interface_repository import InterfaceRepository
 
 class ReportsRepository(InterfaceRepository[Vote]):
 
-    def get_grades_stats(self, candidate_id):
+    def get_cantidad_stats(self, candidate_id):
         query_match = {
-            "candidate.$id": ObjectId(candidate_id)
+            {"candidate.$id": ObjectId('63705e0a5711ba37559e9522')}
         }
         query_aggregation = {
-            "$group": {
-                "_id": "$candidate",
-                "count": {"$sum": 1}
-            }
+                "$group": {
+                      "_id": "$vote",
+                      "cantidad": {"$sum": 1}
+                }
         }
+
         query_sort = {
             "$sort": {
-                "count": -1
+                "cantidad": -1
             }
         }
+
         query_limit = {
             "$limit": 15
         }
-        pipeline = [query_match, query_aggregation, query_sort, query_limit]
+        pipeline = [query_aggregation, query_sort, query_limit]
         return self.query_aggregation(pipeline)
