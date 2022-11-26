@@ -1,11 +1,17 @@
-from flask import Blueprint
+from flask import Blueprint, jsonify
 from controllers.reports_controller import ReportsController
 
 reports_blueprints = Blueprint('reports_blueprints', __name__)
 reports_controller = ReportsController()
 
 
-@reports_blueprints.route("/reports/votes_candidate/all", methods=["GET"])
-def get_report_highest_cantidad():
-    response = reports_controller.report_highest_stats()
-    return response, 200
+@reports_blueprints.route("/reports/table/<string:candidate_id>", methods=['GET'])
+def get_report_highest_table(candidate_id):
+    response = reports_controller.report_table_stats(candidate_id)
+    return jsonify(response)
+
+
+@reports_blueprints.route("/reports/candidate/<string:candidate_id>", methods=['GET'])
+def get_report_highest_candidate(candidate_id):
+    response = reports_controller.report_candidate_stats(candidate_id)
+    return jsonify(response)
