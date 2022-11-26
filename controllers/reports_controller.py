@@ -10,3 +10,9 @@ class ReportsController:
 
     def report_candidate_stats(self, candidate_id):
         return self.report_repository.get_candidate_stats(candidate_id)
+
+    def report_political_stats(self, candidate_id):
+        return self.report_repository.get_political_stats(candidate_id)
+
+    def report_political_stats_winner(self, candidate_id):
+        return self.report_repository.get_political_stats_winner(candidate_id)

@@ -15,3 +15,15 @@ def get_report_highest_table(candidate_id):
 def get_report_highest_candidate(candidate_id):
     response = reports_controller.report_candidate_stats(candidate_id)
     return jsonify(response)
+
+
+@reports_blueprints.route("/reports/political_party/<string:candidate_id>", methods=['GET'])
+def get_report_political_party(candidate_id):
+    response = reports_controller.report_political_stats(candidate_id)
+    return jsonify(response)
+
+
+@reports_blueprints.route("/reports/political_party/winner/<string:candidate_id>", methods=['GET'])
+def get_report_highest_political_party(candidate_id):
+    response = reports_controller.report_political_stats_winner(candidate_id)
+    return jsonify(response)
